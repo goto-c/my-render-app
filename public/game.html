@@ -6,33 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body { background: #222; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    #container { text-align: center; }
     canvas { background: #111; display: block; margin: auto; border: 2px solid #fff; }
     #score { color: #fff; text-align: center; font-size: 1.2em; margin-bottom: 10px; }
   </style>
 </head>
 <body>
-  <div>
+  <div id="container">
     <div id="score">Score: 0</div>
     <canvas id="game" width="400" height="600"></canvas>
   </div>
   <script>
-    // ゲームの初期化
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
     const scoreEl = document.getElementById('score');
-    let player = { x: 200, y: 550, w: 40, h: 10 };
+    let player = { x: 180, y: 560, w: 40, h: 10 };
     let bullets = [];
     let enemies = [];
     let score = 0;
     let gameOver = false;
 
-    // 敵を生成
     function spawnEnemy() {
       const x = Math.random() * (canvas.width - 30);
       enemies.push({ x, y: 0, w: 30, h: 30, speed: 2 + Math.random() * 2 });
     }
 
-    // キー操作
     document.addEventListener('keydown', e => {
       if (gameOver) return;
       if (e.key === 'ArrowLeft' && player.x > 0) player.x -= 20;
@@ -42,22 +40,26 @@
       }
     });
 
-    // ゲームループ
     function loop() {
-      if (gameOver) return;
+      if (gameOver) {
+        ctx.fillStyle = '#fff';
+        ctx.font = '32px sans-serif';
+        ctx.fillText('GAME OVER', 90, 300);
+        return;
+      }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // プレイヤー描画
+      // プレイヤー
       ctx.fillStyle = '#0af';
       ctx.fillRect(player.x, player.y, player.w, player.h);
 
-      // 弾描画・移動
+      // 弾
       ctx.fillStyle = '#ff0';
       bullets.forEach(b => b.y -= 8);
       bullets = bullets.filter(b => b.y > -b.h);
       bullets.forEach(b => ctx.fillRect(b.x, b.y, b.w, b.h));
 
-      // 敵描画・移動
+      // 敵
       ctx.fillStyle = '#f44';
       enemies.forEach(e => e.y += e.speed);
       enemies.forEach(e => ctx.fillRect(e.x, e.y, e.w, e.h));
@@ -66,7 +68,12 @@
       // 衝突判定
       bullets.forEach((b, i) => {
         enemies.forEach((e, j) => {
-          if (b.x < e.x + e.w && b.x + b.w > e.x && b.y < e.y + e.h && b.y + b.h > e.y) {
+          if (
+            b.x < e.x + e.w &&
+            b.x + b.w > e.x &&
+            b.y < e.y + e.h &&
+            b.y + b.h > e.y
+          ) {
             bullets.splice(i, 1);
             enemies.splice(j, 1);
             score += 10;
@@ -77,15 +84,15 @@
 
       // 敵が下まで来たらゲームオーバー
       if (enemies.some(e => e.y + e.h > player.y)) {
-        ctx.fillStyle = '#fff';
-        ctx.font = '32px sans-serif';
-        ctx.fillText('GAME OVER', 90, 300);
         gameOver = true;
-        return;
       }
 
       requestAnimationFrame(loop);
     }
 
-    // 敵を定期的に出現
+    setInterval(() => { if (!gameOver) spawnEnemy(); }, 1000);
+    loop();
+  </script>
+</body>
+</html>
 
