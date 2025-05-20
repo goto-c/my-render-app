@@ -1,0 +1,70 @@
+body {
+  background: #f5f7fa;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Segoe UI", "Hiragino Sans", Arial, sans-serif;
+}
+.container {
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  max-width: 350px;
+  width: 100%;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 1.4em;
+  color: #333;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+input:focus {
+  border-color: #4285f4;
+  outline: none;
+}
+button {
+  background: #4285f4;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #306fd0;
+}
+#result {
+  margin-top: 18px;
+  text-align: center;
+  color: #d32f2f;
+  font-size: 1em;
+  min-height: 1.2em;
+}
+@media (max-width: 480px) {
+  .container {
+    padding: 18px 5vw;
+    max-width: 95vw;
+  }
+}
+
