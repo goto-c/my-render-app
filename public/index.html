@@ -16,6 +16,12 @@
       <button type="submit">登録</button>
     </form>
     <div id="result"></div>
+    <!-- ゲームをプレイボタン -->
+    <div style="text-align:center; margin-top:32px;">
+      <button id="playGameBtn" style="padding: 12px 32px; font-size: 1.1em; background: #43a047; color: #fff; border: none; border-radius: 6px; cursor: pointer;">
+        ゲームをプレイ
+      </button>
+    </div>
   </div>
   <script>
     document.getElementById('registerForm').onsubmit = async function(e) {
@@ -34,6 +40,11 @@
       document.getElementById('result').textContent =
         data.user ? '登録成功: ' + data.user.username : 'エラー: ' + (data.error || '登録に失敗しました');
     };
+
+    // ゲームをプレイボタンのクリックイベント
+    document.getElementById('playGameBtn').addEventListener('click', function() {
+      window.location.href = '/game.html';
+    });
   </script>
 </body>
 </html>
