@@ -1,30 +1,25 @@
-require('dotenv').config(); // ← 一番最初に書くのがベスト！
+require('dotenv').config();
 
 const express = require('express');
 const { Pool } = require('pg');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 追加: JSONリクエストをパース
+// JSONリクエストをパース
 app.use(express.json());
 
-// PostgreSQLの接続設定（.envから読み込む）
+// publicディレクトリを静的ファイルとして公開
+app.use(express.static('public'));
+
+// PostgreSQLの接続設定
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false } // Renderの場合は推奨
+    ssl: { rejectUnauthorized: false }
 });
 
-// 接続テスト
-pool.query('SELECT NOW()', (err, res) => {
-    if (err) {
-        console.error('接続エラー', err);
-    } else {
-        console.log('データベース接続成功！', res.rows);
-    }
-});
-
-// 追加: 会員登録API
+// 会員登録API
 app.post('/register', async (req, res) => {
     const { username, password, email } = req.body;
     if (!username || !password || !email) {
@@ -37,14 +32,8 @@ app.post('/register', async (req, res) => {
         );
         res.status(201).json({ user: result.rows[0] });
     } catch (err) {
-        console.error('登録エラー', err);
         res.status(500).json({ error: '登録に失敗しました' });
     }
-});
-
-// ルートパスにアクセスしたときの応答
-app.get('/', (req, res) => {
-    res.send('こんにちは、Renderからの世界！🌍');
 });
 
 // サーバー起動
